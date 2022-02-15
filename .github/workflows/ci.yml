@@ -82,10 +82,8 @@ jobs:
           poetry-version: ${{ env.POETRY_VERSION }}
       - name: Install dependencies
         run: poetry install
-      - name: Run pytest
-        run: poetry run coverage run --rcfile ./pyproject.toml -m pytest .
-      - name: Run coverage report
-        run: poetry run coverage report --fail-under 90
+      - name: Run tox
+        run: poetry run tox
   push:
     name: Push Docker image
     runs-on: ubuntu-latest
