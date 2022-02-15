@@ -24,8 +24,6 @@ class Settings:
         birth: The fictional birth date for the random beancount data.
     """
 
-    host: str
-    port: int
     start: datetime.date | None
     end: datetime.date | None
     birth: datetime.date | None
@@ -40,9 +38,6 @@ class Settings:
         Returns:
             A new instance of `Settings` configured from the environment.
         """
-        host = os.getenv("HOST", "0.0.0.0")
-        port = int(os.getenv("PORT", 8001))
-
         dates = []
         for date in ("START", "END", "BIRTH"):
             env = os.getenv(date, None)
@@ -55,7 +50,7 @@ class Settings:
 
             dates.append(value)
 
-        return Settings(host, port, *dates)
+        return Settings(*dates)
 
 
 class InvalidSetting(Exception):
@@ -68,6 +63,7 @@ def random_beanfile(
     start: datetime.date | None = None,
     end: datetime.date | None = None,
     birth: datetime.date | None = None,
+    seed: int | None = None,
 ):
     """Generates a randomized beancount ledger.
 
@@ -83,15 +79,15 @@ def random_beanfile(
         end = datetime.date.today()
 
     if not start:
-        start_offset = random.randrange(2, 10)
-        start_month = random.randrange(1, 12)
-        start_day = random.randrange(1, 28)
+        start_offset = _rand_range(2, 10, seed)
+        start_month = _rand_range(1, 12, seed)
+        start_day = _rand_range(1, 28, seed)
         start = datetime.date(end.year - start_offset, start_month, start_day)
 
     if not birth:
-        birth_offset = random.randrange(20, 40)
-        birth_month = random.randrange(1, 12)
-        birth_day = random.randrange(1, 28)
+        birth_offset = _rand_range(20, 40, seed)
+        birth_month = _rand_range(1, 12, seed)
+        birth_day = _rand_range(1, 28, seed)
         birth = datetime.date(end.year - birth_offset, birth_month, birth_day)
 
     logger.info("Generating random data using the following:")
@@ -100,9 +96,25 @@ def random_beanfile(
     logger.info(f"Birth: {str(birth)}")
 
     with io.StringIO() as s:
-        example.write_example_file(birth, start, end, True, file=s)
+        example.write_example_file(birth, start, end, True, s)
         s.seek(0)
         return s.read()
+
+
+def _rand_range(start: int, end: int, seed: int | None = None):
+    """Generates a random number in a range with an optional seed value.
+
+    Args:
+        start: The starting value
+        end: THe ending value
+        seed: Optional seed
+
+    Returns:
+        A random integer between start and end.
+    """
+    if seed:
+        random.seed(seed)
+    return random.randrange(start, end)
 
 
 async def on_startup(_):
