@@ -16,11 +16,15 @@ loguricorn = "^0.1.0"
 [tool.poetry.dev-dependencies]
 black = "^22.1.0"
 flake8 = "^4.0.1"
-pytest = "^7.0.1"
+pytest = "^6.2.5"
 isort = "^5.10.1"
 mypy = "^0.931"
 coverage = "^6.3.1"
 pytest-aiohttp = "^1.0.4"
+tox = "^3.24.5"
+tox-poetry = "^0.4.1"
+pytest-docker-tools = "^3.1.0"
+requests = "^2.27.1"
 
 [tool.black]
 line-length = 79
