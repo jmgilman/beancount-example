@@ -1,10 +1,10 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
 import datetime
 import io
 import os
 import random
+from dataclasses import dataclass
 
 from aiohttp import web
 from beancount.scripts import example  # type: ignore
