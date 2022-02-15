@@ -1,6 +1,6 @@
 import pytest
-
 from aiohttp import web
+
 from app import main
 
 

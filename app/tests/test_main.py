@@ -1,8 +1,6 @@
 import datetime
-import io
 import os
 import time
-
 from unittest import mock
 
 from app import main
