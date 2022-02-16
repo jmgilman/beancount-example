@@ -51,10 +51,4 @@ WORKDIR /run
 
 USER app
 
-ENTRYPOINT /docker-entrypoint.sh $0 $@
-CMD [ "gunicorn", \
-    "app.main:app", \
-    "--config", "gunicorn_config.py", \
-    "--log-level", "INFO", \
-    "--worker-class", "aiohttp.worker.GunicornWebWorker", \
-    "--logger-class", "loguricorn.Logger" ]
+ENTRYPOINT [ "/docker-entrypoint.sh" ]

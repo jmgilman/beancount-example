@@ -169,7 +169,9 @@ async def on_startup(_):
 
     # Prime cache
     logger.info("Priming cache")
-    get_beanfile()
+    await get_beanfile(app["settings"])
+
+    logger.info("Ready to receive requests")
 
 
 async def serve(request: web.Request):

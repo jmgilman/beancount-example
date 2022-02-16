@@ -5,5 +5,9 @@ set -e
 # Activate venv
 . /opt/pysetup/.venv/bin/activate
 
-# Exec passed command
-exec "$@"
+# Start gunicorn
+exec gunicorn  \
+    app.main:app \
+    --config gunicorn_config.py \
+    --worker-class aiohttp.worker.GunicornWebWorker \
+    --logger-class loguricorn.Logger
