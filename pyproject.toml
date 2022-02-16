@@ -12,6 +12,7 @@ aiohttp = "^3.8.1"
 loguru = "^0.6.0"
 gunicorn = "^20.1.0"
 loguricorn = "^0.1.0"
+aiocache = "^0.11.1"
 
 [tool.poetry.dev-dependencies]
 black = "^22.1.0"

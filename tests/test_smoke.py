@@ -6,5 +6,16 @@ def test_smoke(app):
     url = f"http://localhost:{port}/"
 
     result = requests.get(url)
+    content = result.text
     assert result.status_code == 200
-    assert len(result.text) > 0
+    assert len(content) > 0
+
+    result = requests.get(url)
+    new_content = result.text
+    assert result.status_code == 200
+    assert content == new_content
+
+    result = requests.get(f"{url}?reset")
+    content = result.text
+    assert result.status_code == 200
+    assert content != new_content

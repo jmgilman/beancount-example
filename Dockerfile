@@ -42,6 +42,9 @@ COPY --from=builder-base $VENV_PATH $VENV_PATH
 COPY ./docker-entrypoint.sh /docker-entrypoint.sh
 RUN chmod +x /docker-entrypoint.sh
 
+# Copy config
+COPY ./gunicorn_config.py /run/gunicorn_config.py
+
 # Copy app
 COPY ./app /run/app
 WORKDIR /run
@@ -51,5 +54,7 @@ USER app
 ENTRYPOINT /docker-entrypoint.sh $0 $@
 CMD [ "gunicorn", \
     "app.main:app", \
+    "--config", "gunicorn_config.py", \
+    "--log-level", "INFO", \
     "--worker-class", "aiohttp.worker.GunicornWebWorker", \
     "--logger-class", "loguricorn.Logger" ]
