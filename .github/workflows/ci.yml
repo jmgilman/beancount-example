@@ -108,6 +108,10 @@ jobs:
           key: tox-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
       - name: Run tox
         run: poetry run tox
+      - name: Upload coverage report to CodeCov
+        uses: codecov/codecov-action@v2
+        with:
+          files: ./coverage.xml
   push:
     name: Push Docker image
     runs-on: ubuntu-latest
