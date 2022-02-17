@@ -20,6 +20,7 @@ FROM python-base as builder-base
 
 # Update and install deps
 RUN apt-get update \
+    && apt-get upgrade -y \
     && apt-get install --no-install-recommends -y build-essential curl
 
 # Install Poetry
@@ -34,6 +35,10 @@ FROM python-base as production
 
 # Add non-root user
 RUN addgroup --system app && adduser --system --group app
+
+# Update
+RUN apt-get update \
+    && apt-get upgrade -y
 
 # Copy poetry and runtime deps
 COPY --from=builder-base $VENV_PATH $VENV_PATH
