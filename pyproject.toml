@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "beancount-example"
-version = "0.1.0"
+version = "0.1.1"
 description = "A small container for generating example Beancount data"
 authors = ["Joshua Gilman <joshuagilman@gmail.com>"]
 license = "MIT"
