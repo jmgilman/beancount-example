@@ -2,6 +2,8 @@ on:
   push:
     branches:
       - master
+    tags:
+      - '*'
     paths-ignore:
       - '.vscode/**'
       - '**.md'
