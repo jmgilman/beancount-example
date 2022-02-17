@@ -1,5 +1,7 @@
 on:
   push:
+    branches:
+      - master
     paths-ignore:
       - '.vscode/**'
       - '**.md'
@@ -174,12 +176,12 @@ jobs:
         with:
           sarif_file: 'trivy-results.sarif'
       - name: Sign the published DockerHub image
-        if: ${{ github.event_name != 'pull_request' }}
+        if: startsWith(github.event.ref, 'refs/tags/v')
         env:
           COSIGN_EXPERIMENTAL: "true"
         run: cosign sign ${{ env.IMAGE_NAME }}@${{ steps.build-and-push.outputs.digest }}
       - name: Sign the published Github Container Registry image
-        if: ${{ github.event_name != 'pull_request' }}
+        if: startsWith(github.event.ref, 'refs/tags/v')
         env:
           COSIGN_EXPERIMENTAL: "true"
         run: cosign sign ghcr.io/${{ env.IMAGE_NAME }}@${{ steps.build-and-push.outputs.digest }}
