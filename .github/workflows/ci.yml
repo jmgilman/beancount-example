@@ -33,6 +33,8 @@ jobs:
         run: poetry install
       - name: Run flake8
         run: poetry run flake8 $(git ls-files "*.py")
+      - name: Run bandit
+        run: poetry run bandit -c pyproject.toml -r .
   format:
     name: Validate formatting
     runs-on: ubuntu-latest
