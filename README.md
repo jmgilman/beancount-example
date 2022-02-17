@@ -22,7 +22,7 @@ beancount data.
 Run the container:
 
 ```shell
-docker run -p 8001:8001 jmgilman/example-beancount # or ghcr.io/jmgilman/example-beancount
+docker run -p 8001:8001 jmgilman/beancount-example # or ghcr.io/jmgilman/beancount-example
 ```
 
 The generated beancount data can be accessed at the root path:
