@@ -7,6 +7,10 @@
     <a href="https://hub.docker.com/repository/docker/jmgilman/beancount-example">
         <img src="https://img.shields.io/docker/image-size/jmgilman/beancount-example?sort=date"/>
     </a>
+    <a href="https://app.codecov.io/gh/jmgilman/beancount-example">
+        <img src="https://img.shields.io/codecov/c/gh/jmgilman/beancount-example"/>
+    </a>
+    <img src="https://img.shields.io/github/license/jmgilman/beancount-example"/>
 </p>
 
 > A small container which generates example beancount ledger files and makes them
