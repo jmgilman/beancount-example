@@ -21,6 +21,7 @@ runs:
       with:
         version: ${{ inputs.poetry_version }}
     - name: Install Nox
+      shell: bash
       run: |
         poetry export --dev --format=requirements.txt --without-hashes -o constraints.txt
         python -m pip install -c constraints.txt nox nox-poetry
