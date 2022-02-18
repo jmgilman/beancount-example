@@ -24,8 +24,8 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  lint:
-    name: Run linter
+  static:
+    name: Run static analysis tools
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -36,52 +36,20 @@ jobs:
         uses: snok/install-poetry@v1
         with:
           version: ${{ env.POETRY_VERSION }}
-          virtualenvs-create: true
-          virtualenvs-in-project: true
+      - name: Install Nox
+        run: poetry install nox
       - name: Load cached venv
-        id: cached-poetry
+        id: cached-nox
         uses: actions/cache@v2
         with:
-          path: .venv
+          path: .nox
           key: venv-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
-      - name: Install dependencies
-        if: steps.cached-poetry.outputs.cache-hit != 'true'
-        run: poetry install
-      - name: Run flake8
-        run: poetry run flake8 $(git ls-files "*.py")
-      - name: Run mypy
-        run: poetry run mypy $(git ls-files "*.py")
-      - name: Run bandit
-        run: poetry run bandit -c pyproject.toml -r .
-  format:
-    name: Validate formatting
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
-        with:
-          python-version: ${{ env.PYTHON_VERSION }}
-      - name: Setup Poetry
-        uses: snok/install-poetry@v1
-        with:
-          version: ${{ env.POETRY_VERSION }}
-          virtualenvs-create: true
-          virtualenvs-in-project: true
-      - name: Load cached venv
-        id: cached-poetry
-        uses: actions/cache@v2
-        with:
-          path: .venv
-          key: venv-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
-      - name: Install dependencies
-        if: steps.cached-poetry.outputs.cache-hit != 'true'
-        run: poetry install
-      - name: Run black
-        run: poetry run black --config pyproject.toml --diff --check .
-      - name: Run isort
-        run: poetry run isort --settings-path pyproject.toml --check-only .
+      - name: Run linters
+        run: nox -rs lint
+      - name: Run formatters
+        run: nox -rs format
   test:
-    name: Run tests
+    name: Run test suite
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -92,24 +60,18 @@ jobs:
         uses: snok/install-poetry@v1
         with:
           version: ${{ env.POETRY_VERSION }}
-          virtualenvs-create: true
-          virtualenvs-in-project: true
+      - name: Install Nox
+        run: poetry install nox
       - name: Load cached venv
-        id: cached-poetry
+        id: cached-nox
         uses: actions/cache@v2
         with:
-          path: .venv
+          path: .nox
           key: venv-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
-      - name: Install dependencies
-        if: steps.cached-poetry.outputs.cache-hit != 'true'
-        run: poetry install
-      - name: Load cached tox
-        uses: actions/cache@v2
-        with:
-          path: .tox
-          key: tox-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
-      - name: Run tox
-        run: poetry run tox
+      - name: Run tests
+        run: nox -rs test
+      - name: Run coverage
+        run: nox -rs coverage
       - name: Upload coverage report to CodeCov
         uses: codecov/codecov-action@v2
         with:
