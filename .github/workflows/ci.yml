@@ -32,7 +32,7 @@ jobs:
       - uses: ./.github/workflows/composite/setup-python
         with:
           python_version: ${{ env.PYTHON_VERSION }}
-          python_version: ${{ env.POETRY_VERSION }}
+          poetry_version: ${{ env.POETRY_VERSION }}
       - name: Run linters
         run: nox -rs lint
       - name: Run formatters
@@ -45,7 +45,7 @@ jobs:
       - uses: ./.github/workflows/composite/setup-python
         with:
           python_version: ${{ env.PYTHON_VERSION }}
-          python_version: ${{ env.POETRY_VERSION }}
+          poetry_version: ${{ env.POETRY_VERSION }}
       - name: Run tests
         run: nox -rs test
       - name: Run coverage

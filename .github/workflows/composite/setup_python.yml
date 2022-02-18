@@ -5,7 +5,7 @@ inputs:
     description: Python version to install
     required: true
     default: "3.10.2"
-  python_version:
+  poetry_version:
     description: Poetry version to install
     required: true
     default: "1.1.12"
