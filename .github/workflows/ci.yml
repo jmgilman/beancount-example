@@ -37,6 +37,8 @@ jobs:
         run: nox -rs lint
       - name: Run formatters
         run: nox -rs format
+      - name: Run type checking
+        run: nox -rs typing
   test:
     name: Run test suite
     runs-on: ubuntu-latest

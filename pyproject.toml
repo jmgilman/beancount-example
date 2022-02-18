@@ -33,7 +33,7 @@ nox = "^2022.1.7"
 nox-poetry = "^0.9.0"
 
 [tool.bandit]
-skips = ["B311"]
+skips = ["B311", "B404", "B603"]
 
 [tool.black]
 line-length = 79

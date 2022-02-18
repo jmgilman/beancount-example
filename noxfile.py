@@ -1,13 +1,13 @@
-import nox
 import pathlib
 import subprocess
 
+import nox
 from nox_poetry import session
 
 PYTHON_VERSIONS = ["3.10"]
 
 # Set default sessions
-nox.options.sessions = ["format", "lint", "test"]
+nox.options.sessions = ["format", "lint", "test", "typing"]
 
 # Main app
 app = "."
@@ -18,7 +18,8 @@ isort = "isort"
 
 # Linters
 flake8 = "flake8"
-mypy = ("mypy", "aiohttp", "pytest", "loguru")
+bandit = "bandit"
+mypy = ("mypy", "aiohttp", "pytest", "loguru", "nox", "nox-poetry")
 pytest = ("pytest", "pytest-aiohttp", "pytest-cov")
 
 
@@ -40,10 +41,15 @@ def format(session: nox.Session):
 
 @session(python=PYTHON_VERSIONS)
 def lint(session: nox.Session):
-    session.install(flake8, *mypy, *pytest)
+    session.install(flake8, bandit, *pytest)
 
     session.run("flake8", *py_files())
     session.run("bandit", "-q", "-c", "pyproject.toml", *pkg_files())
+
+
+@session(python=PYTHON_VERSIONS)
+def typing(session: nox.Session):
+    session.install(*mypy)
     session.run("mypy", *py_files())
 
 
@@ -65,8 +71,8 @@ def git_files() -> list[str]:
     Returns:
         A list of relative file paths.
     """
-    proc = subprocess.run(["git", "ls-files"], stdout=subprocess.PIPE)
-    return proc.stdout.decode("utf-8").rstrip("\n").split("\n")
+    proc = subprocess.check_output(["/usr/bin/git", "ls-files"])
+    return proc.decode("utf-8").rstrip("\n").split("\n")
 
 
 def pkg_files() -> list[str]:

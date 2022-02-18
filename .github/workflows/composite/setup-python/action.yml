@@ -30,4 +30,4 @@ runs:
       uses: actions/cache@v2
       with:
         path: .nox
-        key: venv-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
+        key: venv-${{ runner.os }}-${{ hashFiles('**/poetry.lock', '**/noxfile.py') }}
