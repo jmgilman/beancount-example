@@ -1,0 +1,32 @@
+name: Setup Python
+description: Installs Python, Poetry, and Nox with cache support
+inputs:
+  python_version:
+    description: Python version to install
+    required: true
+    default: "3.10.2"
+  python_version:
+    description: Poetry version to install
+    required: true
+    default: "1.1.12"
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/setup-python@v2
+      with:
+        python-version: ${{ inputs.python_version }}
+    - name: Setup Poetry
+      uses: snok/install-poetry@v1
+      with:
+        version: ${{ inputs.poetry_version }}
+    - name: Install Nox
+      run: |
+        poetry export --dev --format=requirements.txt --without-hashes -o constraints.txt
+        python -m pip install -c constraints.txt nox nox-poetry
+    - name: Load cached venv
+      id: cached-nox
+      uses: actions/cache@v2
+      with:
+        path: .nox
+        key: venv-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}

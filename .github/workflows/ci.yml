@@ -29,21 +29,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
+      - uses: ./.github/workflows/composite/setup-python
         with:
-          python-version: ${{ env.PYTHON_VERSION }}
-      - name: Setup Poetry
-        uses: snok/install-poetry@v1
-        with:
-          version: ${{ env.POETRY_VERSION }}
-      - name: Install Nox
-        run: poetry install nox
-      - name: Load cached venv
-        id: cached-nox
-        uses: actions/cache@v2
-        with:
-          path: .nox
-          key: venv-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
+          python_version: ${{ env.PYTHON_VERSION }}
+          python_version: ${{ env.POETRY_VERSION }}
       - name: Run linters
         run: nox -rs lint
       - name: Run formatters
@@ -53,23 +42,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
+      - uses: ./.github/workflows/composite/setup-python
         with:
-          python-version: ${{ env.PYTHON_VERSION }}
-      - name: Setup Poetry
-        uses: snok/install-poetry@v1
-        with:
-          version: ${{ env.POETRY_VERSION }}
-      - name: Install Nox
-        run: |
-          poetry export --dev --format=requirements.txt --without-hashes -o constraints.txt
-          python -m pip install -c constraints.txt nox nox-poetry
-      - name: Load cached venv
-        id: cached-nox
-        uses: actions/cache@v2
-        with:
-          path: .nox
-          key: venv-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
+          python_version: ${{ env.PYTHON_VERSION }}
+          python_version: ${{ env.POETRY_VERSION }}
       - name: Run tests
         run: nox -rs test
       - name: Run coverage
